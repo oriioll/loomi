@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+:root {
+    /* Black backgrounds */
+    --bg-black: #000000;
+    --card-bg: #111111;
+    --card-border: #222222;
+    
+    /* Accents */
+    --accent-primary: #6366F1; 
+    --accent-secondary: #10B981; 
+    --accent-error: #EF4444;
+    
+    /* Text colors */
+    --text-main: #FFFFFF;
+    --text-muted: #A1A1AA;
+    
+    /* Fonts */
+    --font-titles: 'Montserrat', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+}
