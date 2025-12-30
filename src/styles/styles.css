@@ -173,9 +173,11 @@ section.login {
 }
 
 .btnNotReady {
+  opacity: .5;
   cursor: not-allowed;
 }
 .btnReady {
+  opacity: 1;
   cursor: pointer;
   transition: all .3s ease-out;
 }
