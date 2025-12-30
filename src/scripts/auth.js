@@ -40,6 +40,15 @@ signUpBtn.addEventListener('click', ()=> {
     usernameDiv.style.display = 'block';
     //Change btn text
     submitBtn.textContent = 'Sign Up';
+
+    //Change submit btn styles
+    if(isValid()) {
+        submitBtn.classList.add('btnReady');
+        submitBtn.classList.remove('btnNotReady');
+    } else {
+        submitBtn.classList.add('btnNotReady');
+        submitBtn.classList.remove('btnReady');
+    }
 })
 
 form.addEventListener('input', ()=> {
@@ -50,6 +59,17 @@ form.addEventListener('input', ()=> {
     } else {
         submitBtn.classList.add('btnReady');
         submitBtn.classList.remove('btnNotReady');
+    }
+
+    //Only in sign up part
+    if(authType === 'signUp') {
+        if(isValid()) {
+            submitBtn.classList.add('btnReady');
+            submitBtn.classList.remove('btnNotReady');
+        } else {
+            submitBtn.classList.add('btnNotReady');
+            submitBtn.classList.remove('btnReady');
+        }
     }
 })
 
@@ -90,4 +110,31 @@ function isEmpty() {
     } else {
         return false;
     }
+}
+
+function isValid() {
+    let isValid = true
+    //Email regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    //Password regular expresion (8 caracs and numbers)
+    const passwordRegex = /^(?=.*\d).{8,}$/;
+
+    //Full name regular expression (Only letters)
+    const nameRegex = /^[A-Za-zÁ-ÿ\s]+$/;
+
+    if(!emailRegex.test(emailInput.value.trim())) {
+        console.log ('Invalid Email');
+        isValid = false;
+    } 
+    if(!nameRegex.test(usernameInput.value.trim())) {
+        console.log ('Invalid Name');
+        isValid = false;
+    }
+    if(!passwordRegex.test(passwordInput.value.trim())) {
+        console.log ('Invalid password');
+        isValid = false;
+    } 
+
+    return isValid
 }

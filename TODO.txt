@@ -1,6 +1,3 @@
 TODO: 
 
-1. Hacer que al clickar en los botones de signup o sign in cambie el formulario, su contenido y la variable authType del js
-2. Hacer que al clickar en esos botones añadir o quitar la clase active de ellos (si esta pulsado añadir active y borrar active del otro)
-3. Validar que los datos del formulario sean correctos (que sea un email y blablabla y añadir span de error), cuando sean correctos hacer que el boton sea clickable añadiendo la clase btnReady y quitando la de btnNotReady
-4. Crear bbdd en supabase y conectarla al frontend
+1. Crear bbdd en supabase y conectarla al frontend
