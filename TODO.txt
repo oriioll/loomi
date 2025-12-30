@@ -1,3 +1,4 @@
 TODO: 
 
-1. Crear bbdd en supabase y conectarla al frontend
+1. Añadir mensaje span de error al validar formulario (campos vacios, contraseña debe tener bla bla bla, y eso, solo en el signup)
+2. Crear bbdd en supabase y conectarla al frontend
