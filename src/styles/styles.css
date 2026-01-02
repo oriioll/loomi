@@ -153,8 +153,26 @@ section.login {
 }
 
 .email:focus-within,
-.password:focus-within {
+.password:focus-within,
+.username:focus-within  {
   border-bottom: solid 2px var(--accent-primary);
+}
+
+/*If its error*/
+.errorTypeInput {
+  border-bottom: solid 2px var(--accent-error);
+}
+.errorTypeInput:focus-within  {
+  border-bottom: solid 2px var(--accent-error);
+}
+
+/* Error message*/
+span#errorMessage {
+  color: var(--accent-error);
+  font-size: .8rem;
+  font-family: var(--font-body);
+  width: 50%;
+  text-align: center;
 }
 
 /* Submit btn styles */

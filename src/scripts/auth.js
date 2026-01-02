@@ -15,6 +15,7 @@ const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const submitBtn = document.getElementById('submitBtn');
+const errorMessage = document.getElementById('errorMessage');
 
 //Hide username by default
 usernameDiv.style.display = 'none';
@@ -29,6 +30,7 @@ signInBtn.addEventListener('click', ()=> {
     usernameDiv.style.display = 'none';
     //Change btn text
     submitBtn.textContent = 'Sign In';
+    errorMessage.style.display = 'none';
 })
 
 signUpBtn.addEventListener('click', ()=> {
@@ -40,36 +42,34 @@ signUpBtn.addEventListener('click', ()=> {
     usernameDiv.style.display = 'block';
     //Change btn text
     submitBtn.textContent = 'Sign Up';
-
-    //Change submit btn styles
-    if(isValid()) {
-        submitBtn.classList.add('btnReady');
-        submitBtn.classList.remove('btnNotReady');
-    } else {
-        submitBtn.classList.add('btnNotReady');
-        submitBtn.classList.remove('btnReady');
-    }
+    //Reset all values
+    usernameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = '';
+    updateBtn(submitBtn, false);
 })
 
+/**
+ * Event of typing in the input
+ */
 form.addEventListener('input', ()=> {
     //Change submit Btn and check empty values
     if (isEmpty()) {
-        submitBtn.classList.add('btnNotReady');
-        submitBtn.classList.remove('btnReady');
+        updateBtn(submitBtn, false);
     } else {
-        submitBtn.classList.add('btnReady');
-        submitBtn.classList.remove('btnNotReady');
+        updateBtn(submitBtn, true);
     }
 
     //Only in sign up part
     if(authType === 'signUp') {
-        if(isValid()) {
-            submitBtn.classList.add('btnReady');
-            submitBtn.classList.remove('btnNotReady');
-        } else {
-            submitBtn.classList.add('btnNotReady');
-            submitBtn.classList.remove('btnReady');
-        }
+        showUiError(generateErrorMessage(nameValid(usernameInput.value.trim()), emailValid(emailInput.value.trim()), passwordValid(passwordInput.value.trim())))
+    } else {
+        //Remove all error classes form signing up and errorMessage
+        errorMessage.style.display = 'none';
+        errorMessage.innerText = '';
+        passwordDiv.classList.remove('errorTypeInput');
+        emailDiv.classList.remove('errorTypeInput');
+        usernameDiv.classList.remove('errorTypeInput');
     }
 })
 
@@ -90,7 +90,10 @@ function alterPassword() {
 })
 }
 
-
+/**
+ * Function that checks if form input values are empty or not
+ * @returns if values are empty or not
+ */
 function isEmpty() {
     let isEmpty = true;
     if (emailInput.value.trim() === '' || passwordInput.value.trim() === '') {
@@ -112,29 +115,118 @@ function isEmpty() {
     }
 }
 
-function isValid() {
-    let isValid = true
+/**
+ * Function that checks if email is valid using a regex
+ * @returns boolean depending if the email is valid
+ */
+function emailValid(email) {
     //Email regular expression
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    if(!emailRegex.test(email)) {
+        console.log ('Invalid Email');
+        return false;
+    }else {
+        return true;
+    }
+}
+
+/**
+ * Function that checks if password is valid using a regex
+ * @returns boolean depending if the password is valid
+ */
+function passwordValid(password) {
     //Password regular expresion (8 caracs and numbers)
     const passwordRegex = /^(?=.*\d).{8,}$/;
 
+    if(!passwordRegex.test(password)) {
+        console.log ('Invalid password');
+        return false;
+    }else {
+        return true;
+    }
+}
+
+/**
+ * Function that checks if name is valid using a regex
+ * @returns boolean depending if the name is valid
+ */
+function nameValid(name) {
     //Full name regular expression (Only letters)
     const nameRegex = /^[A-Za-zÁ-ÿ\s]+$/;
 
-    if(!emailRegex.test(emailInput.value.trim())) {
-        console.log ('Invalid Email');
-        isValid = false;
-    } 
-    if(!nameRegex.test(usernameInput.value.trim())) {
-        console.log ('Invalid Name');
-        isValid = false;
+    if(!nameRegex.test(name)) {
+        console.log ('Invalid name');
+        return false;
+    }else {
+        return true;
     }
-    if(!passwordRegex.test(passwordInput.value.trim())) {
-        console.log ('Invalid password');
-        isValid = false;
-    } 
+}
 
-    return isValid
+/**
+ * Function that generates an error message depending what the errors are
+ * @param {*} name  function [nameValid()]
+ * @param {*} email function [emailValid()]
+ * @param {*} password function [passwordValid()]
+ * @returns 
+ */
+function generateErrorMessage(name, email, password) {
+    let errorArray = [];
+    if(!name) {
+        errorArray.push('Name should only contain letters');
+    }
+    if(!email) {
+        errorArray.push('Invalid email address');
+    }
+    if(!password) {
+        errorArray.push('Password: 8+ chars & 1 number');
+    }
+    return errorArray
+}
+
+/**
+ * Function that updates all the UI based on the error in the form
+ * @param {*} errorArray the array with all the error messages generated in [generateErrorMessage()]
+ */
+function showUiError(errorArray) {
+    //Remove all error classes every time user types and then generate  again the errors
+    usernameDiv.classList.remove('errorTypeInput');
+    passwordDiv.classList.remove('errorTypeInput');
+    emailDiv.classList.remove('errorTypeInput');
+ if(errorArray.length === 0) {
+    errorMessage.style.display = 'none';
+    updateBtn(submitBtn, !isEmpty());
+
+ } else {
+    errorMessage.style.display = 'block'
+    errorMessage.textContent = errorArray.join(', ')
+    updateBtn(submitBtn, false);
+    errorArray.forEach(element => {
+        //Check which input is wrong
+        if(element == 'Name should only contain letters') {
+            usernameDiv.classList.add('errorTypeInput');
+        } 
+        if(element == 'Invalid email address') {
+            emailDiv.classList.add('errorTypeInput');
+        }
+        if(element == 'Password: 8+ chars & 1 number') {
+            passwordDiv.classList.add('errorTypeInput');
+        }
+    });
+ }
+}
+
+/**
+ * Function adds and removes classes from a button to style it making it look valid or unvalid
+ * @param {*} button the button you want to style
+ * @param {*} valid if you want it valid or unvalid
+ */
+function updateBtn(button, valid) {
+    if(valid) {
+        button.classList.add('btnReady');
+        button.classList.remove('btnNotReady');
+    } else {
+        button.classList.add('btnNotReady');
+        button.classList.remove('btnReady');
+    }
 }
