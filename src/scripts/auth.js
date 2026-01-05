@@ -11,6 +11,7 @@ const signUpBtn = document.getElementById('signUp');
 const emailDiv = document.getElementById('emailContainer');
 const passwordDiv = document.getElementById('passwordContainer');
 const usernameDiv = document.getElementById('usernameContainer');
+const roleDiv = document.getElementById('role');
 const usernameInput = document.getElementById('username');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
@@ -26,11 +27,22 @@ signInBtn.addEventListener('click', ()=> {
     //Remove and add classes for styles
     signUpBtn.classList.remove('active');
     signInBtn.classList.add('active');
-    //Hide username div
+    //Hide username and role div
     usernameDiv.style.display = 'none';
+    roleDiv.style.display = 'none';
     //Change btn text
     submitBtn.textContent = 'Sign In';
     errorMessage.style.display = 'none';
+    if(authType === 'signUp') {
+        showUiError(generateErrorMessage(nameValid(usernameInput.value.trim()), emailValid(emailInput.value.trim()), passwordValid(passwordInput.value.trim())))
+    } else {
+        //Remove all error classes form signing up and errorMessage
+        errorMessage.style.display = 'none';
+        errorMessage.innerText = '';
+        passwordDiv.classList.remove('errorTypeInput');
+        emailDiv.classList.remove('errorTypeInput');
+        usernameDiv.classList.remove('errorTypeInput');
+    }
 })
 
 signUpBtn.addEventListener('click', ()=> {
@@ -38,8 +50,9 @@ signUpBtn.addEventListener('click', ()=> {
     //Remove and add classes for styles
     signInBtn.classList.remove('active');
     signUpBtn.classList.add('active');
-    //Show username div
+    //Show username and role div
     usernameDiv.style.display = 'block';
+    roleDiv.style.display = 'flex';
     //Change btn text
     submitBtn.textContent = 'Sign Up';
     //Reset all values
