@@ -17,6 +17,8 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const submitBtn = document.getElementById('submitBtn');
 const errorMessage = document.getElementById('errorMessage');
+let canSubmit = false;
+
 
 //Hide username by default
 usernameDiv.style.display = 'none';
@@ -88,7 +90,29 @@ form.addEventListener('input', ()=> {
 
 form.addEventListener('submit', function(event) {
     event.preventDefault();
-
+    if(canSubmit) {
+        const nameV = usernameInput.value;
+        const emailV = emailInput.value;
+        const passwordV = passwordInput.value;
+        let role = '';
+        if (document.getElementById('teacher').checked) {
+            role = 'teacher';
+        } else {
+            role = 'student';
+        }
+        switch (authType) {
+            case 'signIn': 
+                console.log('signin in...');
+                supabaseLogin(emailV, passwordV);
+                break;
+            case 'signUp':
+                console.log('signing up...');
+                supabaseRegister(emailV, passwordV, nameV, role);
+                break;
+        }
+    }
+    
+    
 })
 
 
@@ -238,8 +262,54 @@ function updateBtn(button, valid) {
     if(valid) {
         button.classList.add('btnReady');
         button.classList.remove('btnNotReady');
+        canSubmit = true;
     } else {
         button.classList.add('btnNotReady');
         button.classList.remove('btnReady');
+        canSubmit = false;
+    }
+}
+
+/**
+ * Function that uses supabase auth.users premade table and signInWithPassword to login
+ * @param {*} email the email you want to login with
+ * @param {*} password the password you want to login with
+ */
+async function supabaseLogin(email, password) {
+    const { data, error } = await _supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) throw error;
+
+    // Redirección al éxito
+    window.location.href = 'dashboard.html';
+}
+
+/**
+ * Function that registers data (a user) in supabase auth.users premade table and in profile table
+ * @param {} email the email you want to register
+ * @param {*} password the password you want to register
+ * @param {*} name the name you want to register
+ * @param {*} role the role you want to register
+ */
+async function supabaseRegister(email, password, name, role) {
+    //Create user in auth.users
+    const { data, error } = await _supabase.auth.signUp({
+        email: email,
+        password: password,
+    });
+
+    if (error) throw error;
+
+    //Insert data in profiles table
+    if (data.user) {
+        const { error: profileError } = await _supabase
+            .from('profiles')
+            .insert([{ id: data.user.id, name: name, email: email, role: role }]);
+        
+        if (profileError) throw profileError;
+        alert("¡Registro completado! Revisa tu email.");
     }
 }

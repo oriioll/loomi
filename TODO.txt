@@ -1,3 +1,4 @@
 TODO: 
 
-1. Crear bbdd en supabase y conectarla al frontend
+1. MOSTRAR SPANS al hacer login o registro (si se registra llevar a dahsboirad html por ejemplo) y si logea bien igual, si no mostrar span de usuario o constraseña failed
+

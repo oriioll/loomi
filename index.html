@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="src/styles/styles.css">
   <!--SUPABASE-->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="src/scripts/supabase.js" defer></script>
   <script src="src/scripts/auth.js" defer></script>
 </head>
 <body>
@@ -19,8 +20,8 @@
     <section class="login">
       <form class="loginForm" id="loginForm">
         <div class="buttons">
-          <button id="signIn" class="active">Sign In</button>
-          <button id="signUp">Sign Up</button>
+          <button type="button" id="signIn" class="active">Sign In</button>
+          <button type="button" id="signUp">Sign Up</button>
         </div>
         <div class="username" id="usernameContainer">
           <input type="text" name="username" id="username" placeholder="Type your full name...">
@@ -41,7 +42,7 @@
           <input type="checkbox" id="teacher" class="teacher" name="teacher" >
         </div>
         <span id="errorMessage"></span>
-        <button id="submitBtn" class="submitBtn btnNotReady">Sign In</button>
+        <button type="submit" id="submitBtn" class="submitBtn btnNotReady">Sign In</button>
       </form>
     </section>
   </main>
