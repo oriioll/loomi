@@ -26,6 +26,9 @@ usernameDiv.style.display = 'none';
 //CHANGE LOGIN IN SIGN UP MENUS
 signInBtn.addEventListener('click', ()=> {
     authType = 'signIn';
+    //Remove error message
+    errorMessage.classList.remove('successfull');
+    errorMessage.style.display = 'none';
     //Remove and add classes for styles
     signUpBtn.classList.remove('active');
     signInBtn.classList.add('active');
@@ -39,6 +42,7 @@ signInBtn.addEventListener('click', ()=> {
         showUiError(generateErrorMessage(nameValid(usernameInput.value.trim()), emailValid(emailInput.value.trim()), passwordValid(passwordInput.value.trim())))
     } else {
         //Remove all error classes form signing up and errorMessage
+        errorMessage.className = '';
         errorMessage.style.display = 'none';
         errorMessage.innerText = '';
         passwordDiv.classList.remove('errorTypeInput');
@@ -49,6 +53,9 @@ signInBtn.addEventListener('click', ()=> {
 
 signUpBtn.addEventListener('click', ()=> {
     authType = 'signUp';
+    //Remove error message
+    errorMessage.classList.remove('successfull');
+    errorMessage.style.display = 'none';
     //Remove and add classes for styles
     signInBtn.classList.remove('active');
     signUpBtn.classList.add('active');
@@ -80,6 +87,7 @@ form.addEventListener('input', ()=> {
         showUiError(generateErrorMessage(nameValid(usernameInput.value.trim()), emailValid(emailInput.value.trim()), passwordValid(passwordInput.value.trim())))
     } else {
         //Remove all error classes form signing up and errorMessage
+        errorMessage.className = '';
         errorMessage.style.display = 'none';
         errorMessage.innerText = '';
         passwordDiv.classList.remove('errorTypeInput');
@@ -111,8 +119,6 @@ form.addEventListener('submit', function(event) {
                 break;
         }
     }
-    
-    
 })
 
 
@@ -230,27 +236,28 @@ function showUiError(errorArray) {
     usernameDiv.classList.remove('errorTypeInput');
     passwordDiv.classList.remove('errorTypeInput');
     emailDiv.classList.remove('errorTypeInput');
- if(errorArray.length === 0) {
-    errorMessage.style.display = 'none';
-    updateBtn(submitBtn, !isEmpty());
+    if(errorArray.length === 0) {
+        errorMessage.style.display = 'none';
+        updateBtn(submitBtn, !isEmpty());
 
- } else {
-    errorMessage.style.display = 'block'
-    errorMessage.textContent = errorArray.join(', ')
-    updateBtn(submitBtn, false);
-    errorArray.forEach(element => {
-        //Check which input is wrong
-        if(element == 'Name should only contain letters') {
-            usernameDiv.classList.add('errorTypeInput');
-        } 
-        if(element == 'Invalid email address') {
-            emailDiv.classList.add('errorTypeInput');
-        }
-        if(element == 'Password: 8+ chars & 1 number') {
-            passwordDiv.classList.add('errorTypeInput');
-        }
-    });
- }
+    } else {
+        errorMessage.className = '';
+        errorMessage.style.display = 'block'
+        errorMessage.textContent = errorArray.join(', ')
+        updateBtn(submitBtn, false);
+        errorArray.forEach(element => {
+            //Check which input is wrong
+            if(element == 'Name should only contain letters') {
+                usernameDiv.classList.add('errorTypeInput');
+            } 
+            if(element == 'Invalid email address') {
+                emailDiv.classList.add('errorTypeInput');
+            }
+            if(element == 'Password: 8+ chars & 1 number') {
+                passwordDiv.classList.add('errorTypeInput');
+            }
+        });
+    }
 }
 
 /**
@@ -281,7 +288,23 @@ async function supabaseLogin(email, password) {
         password: password
     });
 
-    if (error) throw error;
+    if (error){
+        console.error(error);
+        errorMessage.classList.remove ('successfull');
+        errorMessage.style.display = 'block';
+         if (error.message.includes("Email not confirmed")) {
+            errorMessage.innerText = "Please confirm your email.";
+            return;
+        }
+        if (error.message.includes("Invalid login credentials")) {
+            errorMessage.innerText = "Incorrect email or password.";
+            return;
+        }
+        errorMessage.innerText = "An unexpected error occurred. Please try again.";
+        return;
+    }
+
+    console.log(data);
 
     // Redirección al éxito
     window.location.href = 'dashboard.html';
@@ -301,7 +324,14 @@ async function supabaseRegister(email, password, name, role) {
         password: password,
     });
 
-    if (error) throw error;
+    if (error){
+        console.error(error);
+        errorMessage.classList.remove ('successfull');
+        errorMessage.style.display = 'block';
+        if (error.message.includes("User already registered")) {
+            errorMessage.innerText = "This email is already in use. Try signing in or use another email.";
+        }
+    } 
 
     //Insert data in profiles table
     if (data.user) {
@@ -310,6 +340,8 @@ async function supabaseRegister(email, password, name, role) {
             .insert([{ id: data.user.id, name: name, email: email, role: role }]);
         
         if (profileError) throw profileError;
-        alert("¡Registro completado! Revisa tu email.");
+        errorMessage.style.display = 'block';
+        errorMessage.innerText = 'We’ve sent a confirmation email to ' + email;
+        errorMessage.classList.add('successfull');
     }
 }

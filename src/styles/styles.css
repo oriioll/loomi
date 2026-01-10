@@ -213,6 +213,10 @@ span#errorMessage {
   text-align: center;
 }
 
+span#errorMessage.successfull {
+  color: var(--accent-secondary);
+}
+
 /* Submit btn styles */
 
 .loginForm .submitBtn {
