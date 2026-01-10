@@ -1,4 +1,6 @@
 TODO: 
 
-1. MOSTRAR SPANS al hacer login o registro (si se registra llevar a dahsboirad html por ejemplo) y si logea bien igual, si no mostrar span de usuario o constraseña failed
-
+1. Crear dahsboard.html y recuperar nombre (id del usuario en auth.users y en public.profiles sacar name con ese id -> select p.name from public.profile AS p where p.id = num)
+//Supabase de la funcion auth.getUser() devuuelve un objeto con dos elemetnos, data y error, cogemos data y de ahi user y de ahi el id o name
+const result = await _supabase.auth.getUser();
+const username = result.data.user.name;
