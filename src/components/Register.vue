@@ -2,13 +2,15 @@
     <div class="login-page">
   <header>
       <h1>Loomi</h1>
-      <p>Next-gen classroom management | Sign Up</p>
+      <p>Next-gen classroom management</p>
     </header>
     <main>
       <section class="login">
         <form class="loginForm" id="loginForm">
           <div class="buttons">
-            <button type="button" id="signIn">Sign In</button>
+            <RouterLink to="/login">
+                <button type="button" id="signIn">Sign In</button>
+            </RouterLink>
             <button type="button" id="signUp" class="active">Sign Up</button>
           </div>
           <div class="username" id="usernameContainer">
@@ -336,6 +338,23 @@ span#errorMessage.successfull {
     transform: scale(0.85);
   }
 
+}
+
+/*
+fix btns links
+*/
+/* Esto hace que el enlace ocupe el espacio que le toca al botón */
+.buttons a {
+  width: 50%;
+  height: 100%;
+  display: block; /* O inline-block */
+  text-decoration: none; /* Quita el subrayado típico de los links */
+}
+
+/* Ajusta el botón dentro del link para que rellene el 100% de ese 50% */
+.buttons a button {
+  width: 100%;
+  height: 100%;
 }
 
 </style>

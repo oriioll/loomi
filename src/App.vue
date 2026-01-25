@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Login from './components/Login.vue'
+  import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <login />
+  <RouterView />
 </template>
 
 <style scoped>

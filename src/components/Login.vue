@@ -9,7 +9,9 @@
         <form class="loginForm" id="loginForm">
           <div class="buttons">
             <button type="button" id="signIn" class="active">Sign In</button>
-            <button type="button" id="signUp">Sign Up</button>
+            <RouterLink to="/register">
+              <button type="button" id="signUp">Sign Up</button>
+            </RouterLink>
           </div>
           <div class="email" id="emailContainer">
             <input type="text" name="email" id="email" placeholder="Type your Email...">
@@ -334,5 +336,20 @@ span#errorMessage.successfull {
   }
 
 }
+/*
+fix btns links
+*/
+/* Esto hace que el enlace ocupe el espacio que le toca al botón */
+.buttons a {
+  width: 50%;
+  height: 100%;
+  display: block; /* O inline-block */
+  text-decoration: none; /* Quita el subrayado típico de los links */
+}
 
+/* Ajusta el botón dentro del link para que rellene el 100% de ese 50% */
+.buttons a button {
+  width: 100%;
+  height: 100%;
+}
 </style>
