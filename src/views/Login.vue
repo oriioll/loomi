@@ -13,28 +13,31 @@
               <button type="button" id="signUp">Sign Up</button>
             </RouterLink>
           </div>
-          <div class="email" id="emailContainer">
-            <input v-model="email" type="text" name="email" id="email" placeholder="Type your Email...">
-          </div>
-          <div class="password" id="passwordContainer">
-            <!--Changes between type text and password-->
-            <input v-model="password" :type="passwordTypeText ? 'text' : 'password'"
-              placeholder="Password 8 chars with numbers">
-            <svg @click="alterPassword" id="seePassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-              <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-            </svg>
-          </div>
-          <div class="role" id="role" style="display: none;">
-            <p>Are you a teacher?</p>
-            <input type="checkbox" id="teacher" class="teacher" name="teacher">
-          </div>
-          <span v-if="authErrorMessage" id="errorMessage" style="display: block;">{{ authErrorMessage }}</span>
-          <button type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'" :disabled="!canSubmit"
-            id="submitBtn">Sign In</button>
+
+          <TransitionGroup name="staggered" appear>
+            <div class="email" id="emailContainer" key="email-input">
+              <input v-model="email" type="text" name="email" id="email" placeholder="Type your Email...">
+            </div>
+            <div class="password" id="passwordContainer" key="pass-input">
+              <!--Changes between type text and password-->
+              <input v-model="password" :type="passwordTypeText ? 'text' : 'password'"
+                placeholder="Password 8 chars with numbers">
+              <svg @click="alterPassword" id="seePassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+              </svg>
+            </div>
+            <div class="role" id="role" style="display: none;">
+              <p>Are you a teacher?</p>
+              <input type="checkbox" id="teacher" class="teacher" name="teacher">
+            </div>
+            <span v-if="authErrorMessage" id="errorMessage" style="display: block;">{{ authErrorMessage }}</span>
+            <button key="submit-btn" type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'"
+              :disabled="!canSubmit" id="submitBtn">Sign In</button>
+          </TransitionGroup>
         </form>
       </section>
     </main>
@@ -407,5 +410,27 @@ fix btns links
 .buttons a button {
   width: 100%;
   height: 100%;
+}
+
+/*animations*/
+.staggered-enter-active {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.staggered-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.staggered-enter-active:nth-child(2) {
+  transition-delay: 0.05s;
+}
+
+.staggered-enter-active:nth-child(3) {
+  transition-delay: 0.1s;
+}
+
+.staggered-enter-active:nth-child(4) {
+  transition-delay: 0.15s;
 }
 </style>

@@ -102,40 +102,43 @@ async function handleRegister() {
             <button type="button" id="signUp" class="active">Sign Up</button>
           </div>
 
-          <div class="username" :class="{ 'errorTypeInput': !isNameValid && name !== '' }">
-            <input v-model="name" type="text" placeholder="Type your full name...">
-          </div>
+          <TransitionGroup name="staggered" appear>
+            <div key="inputUser" class="username" :class="{ 'errorTypeInput': !isNameValid && name !== '' }">
+              <input v-model="name" type="text" placeholder="Type your full name...">
+            </div>
 
-          <div class="email" :class="{ 'errorTypeInput': !isEmailValid && email !== '' }">
-            <input v-model="email" type="text" placeholder="Type your Email...">
-          </div>
+            <div key="inputEmail" class="email" :class="{ 'errorTypeInput': !isEmailValid && email !== '' }">
+              <input v-model="email" type="text" placeholder="Type your Email...">
+            </div>
 
-          <div class="password" :class="{ 'errorTypeInput': !isPasswordValid && password !== '' }">
-            <input v-model="password" :type="passwordTypeText ? 'text' : 'password'"
-              placeholder="Type your password...">
-            <svg @click="alterPassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-              <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-            </svg>
-          </div>
+            <div key="inputPassword" class="password"
+              :class="{ 'errorTypeInput': !isPasswordValid && password !== '' }">
+              <input v-model="password" :type="passwordTypeText ? 'text' : 'password'"
+                placeholder="Type your password...">
+              <svg @click="alterPassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+              </svg>
+            </div>
 
-          <div class="role">
-            <p>Are you a teacher?</p>
-            <input v-model="isTeacher" type="checkbox" class="teacher">
-          </div>
+            <div key="inputRole" class="role">
+              <p>Are you a teacher?</p>
+              <input v-model="isTeacher" type="checkbox" class="teacher">
+            </div>
 
-          <span v-if="validationErrors.length > 0 || authErrorMessage" id="errorMessage"
-            :class="{ 'successfull': isSuccess }" style="display: block;">
-            {{ authErrorMessage || validationErrors.join(', ') }}
-          </span>
+            <span v-if="validationErrors.length > 0 || authErrorMessage" id="errorMessage"
+              :class="{ 'successfull': isSuccess }" style="display: block;">
+              {{ authErrorMessage || validationErrors.join(', ') }}
+            </span>
 
-          <button type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'"
-            :disabled="!canSubmit">
-            Sign Up
-          </button>
+            <button key="submitBtn" type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'"
+              :disabled="!canSubmit">
+              Sign Up
+            </button>
+          </TransitionGroup>
 
         </form>
       </section>
@@ -458,5 +461,27 @@ fix btns links
 .buttons a button {
   width: 100%;
   height: 100%;
+}
+
+/*animations*/
+.staggered-enter-active {
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.staggered-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.staggered-enter-active:nth-child(2) {
+  transition-delay: 0.05s;
+}
+
+.staggered-enter-active:nth-child(3) {
+  transition-delay: 0.1s;
+}
+
+.staggered-enter-active:nth-child(4) {
+  transition-delay: 0.15s;
 }
 </style>

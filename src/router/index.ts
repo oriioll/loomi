@@ -1,8 +1,8 @@
 // src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../components/Login.vue'
-import Register from '../components/Register.vue'
-import Dashboard from '../components/Dashboard.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,6 +22,13 @@ const router = createRouter({
       name: 'register',
       component: Register,
       meta: { title: 'Loomi | Sign Up' }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
+      meta: { title: 'Loomi | The next-gen classroom manager' }
+      //IF NOT LOGGED IN, GO BACK TO /login
     }
   ]
 })
