@@ -2,13 +2,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
+import Dashboard from '../components/Dashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/login' // Por defecto mandamos al login
+      redirect: '/login' //go login by default
     },
     {
       path: '/login',

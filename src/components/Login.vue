@@ -1,12 +1,12 @@
 <template>
-    <div class="login-page">
-  <header>
+  <div class="login-page">
+    <header>
       <h1>Loomi</h1>
       <p>Next-gen classroom management</p>
     </header>
     <main>
       <section class="login">
-        <form class="loginForm" id="loginForm">
+        <form class="loginForm" id="loginForm" @submit.prevent="handleLogin">
           <div class="buttons">
             <button type="button" id="signIn" class="active">Sign In</button>
             <RouterLink to="/register">
@@ -14,44 +14,87 @@
             </RouterLink>
           </div>
           <div class="email" id="emailContainer">
-            <input type="text" name="email" id="email" placeholder="Type your Email...">
+            <input v-model="email" type="text" name="email" id="email" placeholder="Type your Email...">
           </div>
           <div class="password" id="passwordContainer">
             <!--Changes between type text and password-->
-            <input :type="passwordTypeText ? 'text' : 'password'" name="password" id="password" placeholder="Type your password (8 chars with numbers)">
-            <svg @click="alterPassword" id="seePassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <input v-model="password" :type="passwordTypeText ? 'text' : 'password'"
+              placeholder="Password 8 chars with numbers">
+            <svg @click="alterPassword" id="seePassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
               <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
             </svg>
           </div>
           <div class="role" id="role" style="display: none;">
             <p>Are you a teacher?</p>
-            <input type="checkbox" id="teacher" class="teacher" name="teacher" >
+            <input type="checkbox" id="teacher" class="teacher" name="teacher">
           </div>
-          <span id="errorMessage"></span>
-          <button type="submit" id="submitBtn" class="submitBtn btnNotReady">Sign In</button>
+          <span v-if="authErrorMessage" id="errorMessage" style="display: block;">{{ authErrorMessage }}</span>
+          <button type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'" :disabled="!canSubmit"
+            id="submitBtn">Sign In</button>
         </form>
       </section>
     </main>
-</div>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
-  //Reactive variable for changing text-password input
-  const passwordTypeText = ref(false)
-  /**
-   * Function that changes between true and false in 2 diff values in a input
-   */
-  function alterPassword() {
-    passwordTypeText.value = !passwordTypeText.value
+import { ref, computed } from 'vue'
+import { supabase } from '../supabaseClient.ts'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const email = ref('')
+const password = ref('')
+const passwordTypeText = ref(false)
+const authErrorMessage = ref('') // Variable para el mensaje de error
+
+// Solo validamos que no estén vacíos en el Login (o usa regex si quieres ser estricto)
+const canSubmit = computed(() => {
+  return email.value.trim() !== '' && password.value.trim() !== ''
+})
+
+function alterPassword() {
+  passwordTypeText.value = !passwordTypeText.value
+}
+
+/**
+ * Function that uses supabase auth.users premade table and signInWithPassword to login
+ */
+async function handleLogin() {
+  if (!canSubmit.value) return
+  authErrorMessage.value = ''
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  })
+
+  if (error) {
+    console.error(error)
+    // Aplicamos tu lógica de mensajes personalizados
+    if (error.message.includes("Email not confirmed")) {
+      authErrorMessage.value = "Please confirm your email."
+    }
+    else if (error.message.includes("Invalid login credentials")) {
+      authErrorMessage.value = "Incorrect email or password."
+    }
+    else {
+      authErrorMessage.value = "An unexpected error occurred. Please try again."
+    }
+    return
+  } else {
+    router.push('/dashboard')
   }
+}
 </script>
 
 <style scoped>
 .login-page {
-   width: 100dvw;
+  width: 100dvw;
   height: 100dvh;
   font-size: 16px;
   font-family: var(--font-body);
@@ -111,7 +154,7 @@ section.login {
   background-color: var(--card-bg);
   border-radius: 20px;
   border: solid 2px var(--card-border);
-  box-shadow: 0 10px 30px rgba(2,6,23,0.6), 0 2px 6px rgba(0,0,0,0.35);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6), 0 2px 6px rgba(0, 0, 0, 0.35);
   transition: all .3s ease-out;
   display: flex;
   flex-direction: column;
@@ -123,7 +166,7 @@ section.login {
 
 .loginForm:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(2,6,23,0.6), 0 6px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.6), 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 .loginForm .buttons {
@@ -158,7 +201,9 @@ section.login {
 
 
 /*Input styles*/
-.email, .password, .username {
+.email,
+.password,
+.username {
   width: 50%;
   height: 50px;
   display: flex;
@@ -201,7 +246,7 @@ section.login {
 
 .email:focus-within,
 .password:focus-within,
-.username:focus-within  {
+.username:focus-within {
   border-bottom: solid 2px var(--accent-primary);
 }
 
@@ -209,7 +254,8 @@ section.login {
 .errorTypeInput {
   border-bottom: solid 2px var(--accent-error);
 }
-.errorTypeInput:focus-within  {
+
+.errorTypeInput:focus-within {
   border-bottom: solid 2px var(--accent-error);
 }
 
@@ -243,7 +289,7 @@ section.login {
 /* Focus outline for accessibility */
 .loginForm .role input[type="checkbox"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 6px rgba(99,102,241,0.12);
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.12);
   border-radius: 4px;
 }
 
@@ -273,13 +319,14 @@ span#errorMessage.successfull {
   padding: 14px 28px;
   border-radius: 15px;
   transition: all .3s ease;
-  box-shadow: 0px 4px 8px rgba(2,6,23,0.6);
+  box-shadow: 0px 4px 8px rgba(2, 6, 23, 0.6);
 }
 
 .btnNotReady {
   opacity: .5;
   cursor: not-allowed;
 }
+
 .btnReady {
   opacity: 1;
   cursor: pointer;
@@ -294,35 +341,41 @@ span#errorMessage.successfull {
 /*RESPONSIVE MEDIA QUERIES*/
 @media (max-width: 768px) {
   header h1 {
-  font-size: 3rem;
+    font-size: 3rem;
   }
 
   header p {
     font-size: 1.1rem;
   }
+
   main {
     height: 65%;
   }
+
   section.login {
-  width: 100%;
-  padding: 10px;
+    width: 100%;
+    padding: 10px;
   }
 
   .loginForm {
     padding-bottom: 20px;
   }
 
-  .email, .password, .username {
-  width: 85%;
-  height: 100%;
-  height: 50px;
+  .email,
+  .password,
+  .username {
+    width: 85%;
+    height: 100%;
+    height: 50px;
   }
 
-  .loginForm .submitBtn, .buttons button {
-  font-size: 1rem;
+  .loginForm .submitBtn,
+  .buttons button {
+    font-size: 1rem;
   }
 
-  .loginForm input, .role {
+  .loginForm input,
+  .role {
     font-size: .8rem;
   }
 
@@ -336,6 +389,7 @@ span#errorMessage.successfull {
   }
 
 }
+
 /*
 fix btns links
 */
@@ -343,8 +397,10 @@ fix btns links
 .buttons a {
   width: 50%;
   height: 100%;
-  display: block; /* O inline-block */
-  text-decoration: none; /* Quita el subrayado típico de los links */
+  display: block;
+  /* O inline-block */
+  text-decoration: none;
+  /* Quita el subrayado típico de los links */
 }
 
 /* Ajusta el botón dentro del link para que rellene el 100% de ese 50% */

@@ -1,60 +1,151 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { supabase } from '../supabaseClient'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// 1. VARIABLES REACTIVAS
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const isTeacher = ref(false)
+const passwordTypeText = ref(false)
+const authErrorMessage = ref('') // Para errores de Supabase
+const isSuccess = ref(false)    // Para el estilo 'successfull'
+
+// 2. TUS REGEX
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const passwordRegex = /^(?=.*\d).{8,}$/
+const nameRegex = /^[A-Za-zÁ-ÿ\s]+$/
+
+// 3. VALIDACIONES COMPUTADAS (UI)
+const isNameValid = computed(() => name.value === '' || nameRegex.test(name.value.trim()))
+const isEmailValid = computed(() => email.value === '' || emailRegex.test(email.value.trim()))
+const isPasswordValid = computed(() => password.value === '' || passwordRegex.test(password.value.trim()))
+
+const validationErrors = computed(() => {
+  const errors = []
+  if (!isNameValid.value && name.value !== '') errors.push('Name should only contain letters')
+  if (!isEmailValid.value && email.value !== '') errors.push('Invalid email address')
+  if (!isPasswordValid.value && password.value !== '') errors.push('Password: 8+ chars & 1 number')
+  return errors
+})
+
+const canSubmit = computed(() => {
+  return name.value.trim() !== '' && email.value.trim() !== '' &&
+    password.value.trim() !== '' && isNameValid.value &&
+    isEmailValid.value && isPasswordValid.value
+})
+
+function alterPassword() {
+  passwordTypeText.value = !passwordTypeText.value
+}
+
+/**
+ * Function that registers data (a user) in supabase auth.users premade table and in profile table
+ */
+async function handleRegister() {
+  if (!canSubmit.value) return
+
+  authErrorMessage.value = ''
+  isSuccess.value = false
+  const role = isTeacher.value ? 'teacher' : 'student'
+
+  // Create user in auth.users
+  const { data, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+  })
+
+  if (error) {
+    console.error(error)
+    if (error.message.includes("User already registered")) {
+      authErrorMessage.value = "This email is already in use. Try signing in or use another email."
+    } else {
+      authErrorMessage.value = error.message
+    }
+    return
+  }
+
+  // Insert data in profiles table
+  if (data.user) {
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert([{ id: data.user.id, name: name.value, email: email.value, role: role }])
+
+    if (profileError) {
+      authErrorMessage.value = "Error creating profile: " + profileError.message
+      return
+    }
+
+    authErrorMessage.value = 'We’ve sent a confirmation email to ' + email.value
+    isSuccess.value = true
+  }
+}
+</script>
+
 <template>
-    <div class="login-page">
-  <header>
+  <div class="login-page">
+    <header>
       <h1>Loomi</h1>
       <p>Next-gen classroom management</p>
     </header>
+
     <main>
       <section class="login">
-        <form class="loginForm" id="loginForm">
+        <form class="loginForm" @submit.prevent="handleRegister">
           <div class="buttons">
             <RouterLink to="/login">
-                <button type="button" id="signIn">Sign In</button>
+              <button type="button" id="signIn">Sign In</button>
             </RouterLink>
             <button type="button" id="signUp" class="active">Sign Up</button>
           </div>
-          <div class="username" id="usernameContainer">
-            <input type="text" name="username" id="username" placeholder="Type your full name...">
+
+          <div class="username" :class="{ 'errorTypeInput': !isNameValid && name !== '' }">
+            <input v-model="name" type="text" placeholder="Type your full name...">
           </div>
-          <div class="email" id="emailContainer">
-            <input type="text" name="email" id="email" placeholder="Type your Email...">
+
+          <div class="email" :class="{ 'errorTypeInput': !isEmailValid && email !== '' }">
+            <input v-model="email" type="text" placeholder="Type your Email...">
           </div>
-          <div class="password" id="passwordContainer">
-            <!--Changes between type text and password-->
-            <input :type="passwordTypeText ? 'text' : 'password'" name="password" id="password" placeholder="Type your password (8 chars with numbers)">
-            <svg @click="alterPassword" id="seePassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+
+          <div class="password" :class="{ 'errorTypeInput': !isPasswordValid && password !== '' }">
+            <input v-model="password" :type="passwordTypeText ? 'text' : 'password'"
+              placeholder="Type your password...">
+            <svg @click="alterPassword" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
               <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
             </svg>
           </div>
-          <div class="role" id="role">
+
+          <div class="role">
             <p>Are you a teacher?</p>
-            <input type="checkbox" id="teacher" class="teacher" name="teacher" >
+            <input v-model="isTeacher" type="checkbox" class="teacher">
           </div>
-          <span id="errorMessage"></span>
-          <button type="submit" id="submitBtn" class="submitBtn btnNotReady">Sign Up</button>
+
+          <span v-if="validationErrors.length > 0 || authErrorMessage" id="errorMessage"
+            :class="{ 'successfull': isSuccess }" style="display: block;">
+            {{ authErrorMessage || validationErrors.join(', ') }}
+          </span>
+
+          <button type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'"
+            :disabled="!canSubmit">
+            Sign Up
+          </button>
+
         </form>
       </section>
     </main>
-</div>
+  </div>
 </template>
-
-<script setup lang="ts">
-  import { ref } from 'vue'
-  //Reactive variable for changing text-password input
-  const passwordTypeText = ref(false)
-  /**
-   * Function that changes between true and false in 2 diff values in a input
-   */
-  function alterPassword() {
-    passwordTypeText.value = !passwordTypeText.value
-  }
-</script>
 
 <style scoped>
 .login-page {
-   width: 100dvw;
+  width: 100dvw;
   height: 100dvh;
   font-size: 16px;
   font-family: var(--font-body);
@@ -114,7 +205,7 @@ section.login {
   background-color: var(--card-bg);
   border-radius: 20px;
   border: solid 2px var(--card-border);
-  box-shadow: 0 10px 30px rgba(2,6,23,0.6), 0 2px 6px rgba(0,0,0,0.35);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6), 0 2px 6px rgba(0, 0, 0, 0.35);
   transition: all .3s ease-out;
   display: flex;
   flex-direction: column;
@@ -126,7 +217,7 @@ section.login {
 
 .loginForm:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(2,6,23,0.6), 0 6px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.6), 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 .loginForm .buttons {
@@ -161,7 +252,9 @@ section.login {
 
 
 /*Input styles*/
-.email, .password, .username {
+.email,
+.password,
+.username {
   width: 50%;
   height: 50px;
   display: flex;
@@ -204,7 +297,7 @@ section.login {
 
 .email:focus-within,
 .password:focus-within,
-.username:focus-within  {
+.username:focus-within {
   border-bottom: solid 2px var(--accent-primary);
 }
 
@@ -212,7 +305,8 @@ section.login {
 .errorTypeInput {
   border-bottom: solid 2px var(--accent-error);
 }
-.errorTypeInput:focus-within  {
+
+.errorTypeInput:focus-within {
   border-bottom: solid 2px var(--accent-error);
 }
 
@@ -246,7 +340,7 @@ section.login {
 /* Focus outline for accessibility */
 .loginForm .role input[type="checkbox"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 6px rgba(99,102,241,0.12);
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.12);
   border-radius: 4px;
 }
 
@@ -276,13 +370,14 @@ span#errorMessage.successfull {
   padding: 14px 28px;
   border-radius: 15px;
   transition: all .3s ease;
-  box-shadow: 0px 4px 8px rgba(2,6,23,0.6);
+  box-shadow: 0px 4px 8px rgba(2, 6, 23, 0.6);
 }
 
 .btnNotReady {
   opacity: .5;
   cursor: not-allowed;
 }
+
 .btnReady {
   opacity: 1;
   cursor: pointer;
@@ -297,35 +392,41 @@ span#errorMessage.successfull {
 /*RESPONSIVE MEDIA QUERIES*/
 @media (max-width: 768px) {
   header h1 {
-  font-size: 3rem;
+    font-size: 3rem;
   }
 
   header p {
     font-size: 1.1rem;
   }
+
   main {
     height: 65%;
   }
+
   section.login {
-  width: 100%;
-  padding: 10px;
+    width: 100%;
+    padding: 10px;
   }
 
   .loginForm {
     padding-bottom: 20px;
   }
 
-  .email, .password, .username {
-  width: 85%;
-  height: 100%;
-  height: 50px;
+  .email,
+  .password,
+  .username {
+    width: 85%;
+    height: 100%;
+    height: 50px;
   }
 
-  .loginForm .submitBtn, .buttons button {
-  font-size: 1rem;
+  .loginForm .submitBtn,
+  .buttons button {
+    font-size: 1rem;
   }
 
-  .loginForm input, .role {
+  .loginForm input,
+  .role {
     font-size: .8rem;
   }
 
@@ -347,8 +448,10 @@ fix btns links
 .buttons a {
   width: 50%;
   height: 100%;
-  display: block; /* O inline-block */
-  text-decoration: none; /* Quita el subrayado típico de los links */
+  display: block;
+  /* O inline-block */
+  text-decoration: none;
+  /* Quita el subrayado típico de los links */
 }
 
 /* Ajusta el botón dentro del link para que rellene el 100% de ese 50% */
@@ -356,5 +459,4 @@ fix btns links
   width: 100%;
   height: 100%;
 }
-
 </style>
