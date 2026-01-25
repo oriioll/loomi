@@ -2,14 +2,17 @@
     <div class="login-page">
   <header>
       <h1>Loomi</h1>
-      <p>Next-gen classroom management</p>
+      <p>Next-gen classroom management | Sign Up</p>
     </header>
     <main>
       <section class="login">
         <form class="loginForm" id="loginForm">
           <div class="buttons">
-            <button type="button" id="signIn" class="active">Sign In</button>
-            <button type="button" id="signUp">Sign Up</button>
+            <button type="button" id="signIn">Sign In</button>
+            <button type="button" id="signUp" class="active">Sign Up</button>
+          </div>
+          <div class="username" id="usernameContainer">
+            <input type="text" name="username" id="username" placeholder="Type your full name...">
           </div>
           <div class="email" id="emailContainer">
             <input type="text" name="email" id="email" placeholder="Type your Email...">
@@ -23,12 +26,12 @@
               <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
             </svg>
           </div>
-          <div class="role" id="role" style="display: none;">
+          <div class="role" id="role">
             <p>Are you a teacher?</p>
             <input type="checkbox" id="teacher" class="teacher" name="teacher" >
           </div>
           <span id="errorMessage"></span>
-          <button type="submit" id="submitBtn" class="submitBtn btnNotReady">Sign In</button>
+          <button type="submit" id="submitBtn" class="submitBtn btnNotReady">Sign Up</button>
         </form>
       </section>
     </main>
