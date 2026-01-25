@@ -225,7 +225,7 @@ section.login {
 
 .loginForm .buttons {
   width: 100%;
-  height: 15%;
+  height: 8vh;
   display: flex;
 }
 
