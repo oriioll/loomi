@@ -8,48 +8,4 @@ import { RouterView } from 'vue-router'
   </router-view>
 </template>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-
-:root {
-  /* Black backgrounds */
-  --bg-black: #000000;
-  --card-bg: #111111;
-  --card-border: #222222;
-
-  /* Accents */
-  --accent-primary: #6366f1;
-  --accent-secondary: #10b981;
-  --accent-error: #ef4444;
-
-  /* Text colors */
-  --text-main: #ffffff;
-  --text-muted: #a1a1aa;
-
-  /* Fonts */
-  --font-titles: 'Montserrat', sans-serif;
-  --font-body: 'Poppins', sans-serif;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-size: 16px;
-  font-family: var(--font-body);
-  background:
-    /* Reflejo superior "Gris Platino" - Simula una luz de estudio */
-    radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.06), transparent 40%),
-    /* Brillo lateral sutil - Da volumen al fondo */
-    radial-gradient(circle at 100% 40%, rgba(255, 255, 255, 0.03), transparent 30%),
-    /* Luz de profundidad inferior - Evita que el fondo se vea "muerto" */
-    radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.02), transparent 40%),
-    /* El degradado de base: de Negro Absoluto a Gris Carbón muy oscuro */
-    linear-gradient(180deg, #000000 0%, #080808 100%);
-  color: var(--text-main);
-}
-</style>
+<style></style>

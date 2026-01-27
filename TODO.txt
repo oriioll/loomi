@@ -1,188 +1,44 @@
-TODO: 
-supabasejs
-ui ux js
-routes default login.vue -> app vue con <router-view /> configuro todo el tema de rutas, me creo paginas como login.vue
- y posibles componentes dentro y usando rutas llamo a las paginas
+LANDING PAGE:
 
+1. Header (La navegación)
+Mantenlo limpio y con el mismo efecto de "cristal" que hablamos para el dashboard.
 
---UX UI JS AI
-u código actual funciona así:
-- Seleccionas elementos con getElementById
-- Cambias estilos con .style.display
-- Añades y quitas clases
-- Escuchas eventos con addEventListener
-- Guardas estado en variables globales (authType, canSubmit, etc.)
-En Vue nada de eso se hace así.
-Vue te da herramientas mucho más potentes:
-- ref() → variables reactivas
-- v-if, v-show → mostrar/ocultar elementos
-- v-model → inputs reactivos
-- @click → eventos
-- :class → clases dinámicas
-- computed → valores derivados
-- watch → reaccionar a cambios
-Vamos a transformar tu login paso a paso.
+Izquierda: Logo (Loomi).
 
-🟦 1) El estado (authType, inputs, errores…)
-En Vue lo declaras así:
-<script setup>
-import { ref, computed } from 'vue'
+Centro: Links suaves: Features, Pricing, About.
 
-const authType = ref('signIn')
+Derecha: Botón secundario (Sign In) y un botón destacado (Get Started / Register).
 
-const username = ref('')
-const email = ref('')
-const password = ref('')
-const role = ref(false)
+2. Hero Section (El impacto)
+Aquí es donde te la juegas. Necesitas un titular que "venda" el problema que resuelves.
 
-const errorMessage = ref('')
-const canSubmit = ref(false)
-</script>
+Título: Algo como "Classroom management, evolved." o "Education without the friction."
 
+Subtítulo: "Loomi helps teachers and students stay organized with a next-gen workspace. No more messy folders, just learning."
 
+CTA (Call to Action): Un botón grande de "Get Started for Free" que brille un poco.
 
-🟩 2) Mostrar/ocultar elementos (sin .style.display)
-En vez de:
-usernameDiv.style.display = 'none'
+Imagen/Mockup: A la derecha o abajo, pon una imagen (o un componente de Vue que lo simule) de tu futuro Bento Grid Dashboard. Que la gente vea qué va a usar.
 
+3. Features Section (¿Por qué Loomi?)
+Aquí puedes usar el estilo Bento de nuevo pero para explicar funciones:
 
-En Vue:
-<div v-if="authType === 'signUp'">
-  <!-- username input -->
-</div>
+Organized workflow: "Everything in its place."
 
+Smart Stats: "Track your progress effortlessly."
 
-O si quieres mantener el espacio:
-<div v-show="authType === 'signUp'">
+Loomi Drive: "Cloud storage integrated into your classes."
 
+4. Pricing (El modelo de negocio)
+Aunque sea un proyecto, poner precios le da mucha seriedad. Sugerencia:
 
+Free (Student): $0/mo. Lo básico para alumnos.
 
-🟨 3) Botones Sign In / Sign Up
-En vanilla:
-signInBtn.addEventListener('click', ...)
+Teacher Pro: $9/mo. Gestión ilimitada de clases y analíticas avanzadas.
 
+School/Institution: Contactar. Para centros enteros.
 
-En Vue:
-<button
-  :class="{ active: authType === 'signIn' }"
-  @click="authType = 'signIn'"
->
-  Sign In
-</button>
+5. Footer (El cierre)
+Copyright © 2026 Loomi.
 
-<button
-  :class="{ active: authType === 'signUp' }"
-  @click="authType = 'signUp'"
->
-  Sign Up
-</button>
-
-
-
-🟪 4) Inputs con v-model (adiós getElementById)
-En Vue:
-<input v-model="username" placeholder="Type your full name..." />
-<input v-model="email" placeholder="Type your Email..." />
-<input v-model="password" type="password" placeholder="Type your password..." />
-
-
-
-🟧 5) Validaciones (sin listeners manuales)
-Tu función isEmpty() se convierte en un computed:
-const isEmpty = computed(() => {
-  if (authType.value === 'signIn') {
-    return email.value.trim() === '' || password.value.trim() === ''
-  }
-
-  return (
-    username.value.trim() === '' ||
-    email.value.trim() === '' ||
-    password.value.trim() === ''
-  )
-})
-
-
-Y el botón:
-<button
-  :class="isEmpty ? 'btnNotReady' : 'btnReady'"
-  :disabled="isEmpty"
->
-  {{ authType === 'signIn' ? 'Sign In' : 'Sign Up' }}
-</button>
-
-
-
-🟫 6) Mostrar errores (sin tocar el DOM)
-Tu showUiError() se convierte en:
-const errors = computed(() => {
-  const arr = []
-
-  if (authType.value === 'signUp') {
-    if (!nameValid(username.value)) arr.push('Name should only contain letters')
-  }
-
-  if (!emailValid(email.value)) arr.push('Invalid email address')
-  if (!passwordValid(password.value)) arr.push('Password: 8+ chars & 1 number')
-
-  return arr
-})
-
-
-Y en el template:
-<span v-if="errors.length" id="errorMessage">
-  {{ errors.join(', ') }}
-</span>
-
-
-
-🟦 7) Submit del formulario
-En Vue:
-<form @submit.prevent="handleSubmit">
-
-
-Y en el script:
-function handleSubmit() {
-  if (isEmpty.value) return
-
-  if (authType.value === 'signIn') {
-    supabaseLogin(email.value, password.value)
-  } else {
-    supabaseRegister(email.value, password.value, username.value, role.value ? 'teacher' : 'student')
-  }
-}
-
-
-
-🟩 8) Mostrar/ocultar contraseña (sin getElementById)
-<input :type="showPassword ? 'text' : 'password'" v-model="password" />
-
-<svg @click="showPassword = !showPassword">...</svg>
-
-
-En script:
-const showPassword = ref(false)
-
-
-
-🎯 Resumen (versión Oriol)
-Tu JS vanilla se convierte en:
-- Estado reactivo → ref()
-- Mostrar/ocultar → v-if, v-show
-- Clases dinámicas → :class
-- Inputs → v-model
-- Eventos → @click, @input, @submit
-- Validaciones → computed
-- Nada de getElementById
-- Nada de addEventListener
-- Nada de .style.display
-Vue hace todo eso por ti.
-
-🧨 Si quieres, te hago tu Login.vue COMPLETO
-Con:
-- Tu HTML original adaptado a Vue
-- Tu CSS original
-- Toda la lógica convertida a Vue
-- Validaciones
-- Animaciones
-- Integración con Supabase
-Solo dime “hazme el Login.vue completo” y te lo dejo listo para copiar y pegar.
+Links rápidos y redes sociales (iconos de X, GitHub, etc.).
