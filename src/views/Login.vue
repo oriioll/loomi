@@ -30,10 +30,6 @@
                 <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
               </svg>
             </div>
-            <div class="role" id="role" style="display: none;">
-              <p>Are you a teacher?</p>
-              <input type="checkbox" id="teacher" class="teacher" name="teacher">
-            </div>
             <span v-if="authErrorMessage" id="errorMessage" style="display: block;">{{ authErrorMessage }}</span>
             <button key="submit-btn" type="submit" class="submitBtn" :class="canSubmit ? 'btnReady' : 'btnNotReady'"
               :disabled="!canSubmit" id="submitBtn">Sign In</button>
@@ -163,7 +159,7 @@ section.login {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 30px;
+  gap: 3rem;
   padding-bottom: 20px;
 }
 

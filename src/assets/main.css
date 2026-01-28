@@ -31,11 +31,11 @@ body {
   font-family: var(--font-body);
   background:
     /* Reflejo superior "Gris Platino" - Simula una luz de estudio */
-    radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.06), transparent 40%),
+    radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.12), transparent 40%),
     /* Brillo lateral sutil - Da volumen al fondo */
-    radial-gradient(circle at 100% 40%, rgba(255, 255, 255, 0.03), transparent 30%),
+    radial-gradient(circle at 100% 40%, rgba(255, 255, 255, 0.08), transparent 30%),
     /* Luz de profundidad inferior - Evita que el fondo se vea "muerto" */
-    radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.02), transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.07), transparent 40%),
     /* El degradado de base: de Negro Absoluto a Gris Carbón muy oscuro */
     linear-gradient(180deg, #000000 0%, #080808 100%);
   color: var(--text-main);

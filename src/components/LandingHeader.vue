@@ -19,15 +19,19 @@ const router = useRouter()
                 <a class="navLink" href="">About</a>
             </li>
             <li class="login">
-                <a class="login" href="/login">Sign In</a>
+                <a class="login" role="button" @click="router.push('/login')">Sign In</a>
             </li>
             <li class="register">
-                <a class="register" href="/register">Get Started</a>
+                <a class="register" role="button" @click="router.push('/register')">Get Started</a>
             </li>
         </ul>
     </header>
 </template>
 <style scoped>
+h2 {
+    font-family: var(--font-titles);
+}
+
 header {
     height: 10%;
     width: 100%;
@@ -35,7 +39,7 @@ header {
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    gap: 1rem
+    gap: 1rem;
 }
 
 ul {
@@ -133,6 +137,10 @@ a.login:hover {
 
 li.login:hover {
     transform: translateY(-2px);
+}
+
+a[role="button"] {
+    cursor: pointer;
 }
 
 /**
