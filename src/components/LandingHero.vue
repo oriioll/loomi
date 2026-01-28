@@ -136,7 +136,6 @@ img {
     position: absolute;
     z-index: -1;
     width: 65%;
-    /* Un poco más grande para que llene la base */
     max-width: 1200px;
     right: -10%;
     bottom: 10%;
@@ -184,9 +183,9 @@ RESPONSIVE MEDIA QUERIES
     img {
         position: absolute;
         z-index: -1;
-        width: 105%;
+        width: 110%;
         max-width: 1200px;
-        transform: translateY(25%) rotate(-1deg);
+        transform: translateY(30%) rotate(-1deg);
     }
 
     .titles h1 {
