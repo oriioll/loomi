@@ -1,42 +1,82 @@
-# apploomi
+# Loomi | Next-gen Classroom Management
+![Development Status](https://img.shields.io/badge/status-in--development-orange?style=for-the-badge)
 
-This template should help get you started developing with Vue 3 in Vite.
+<div align="center">
+  <img src="./public/readme/loomiLandingMockup.png" alt="Loomi Dashboard Mockup" width="800">
+  <br />
+  <p align="center">
+    <b>A seamless workspace for modern education.</b>
+    <br />
+    <a href="https://apploomi.vercel.app"><strong>Visit Live Site »</strong></a>
+  </p>
+</div>
 
-## Recommended IDE Setup
+---
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### 🚀 Overview
+**Loomi** is a high-performance Learning Management System (LMS) designed to eliminate the friction between teaching and learning. Unlike traditional tools, Loomi focuses on a **unified workflow**, providing a "Single Source of Truth" for students and teachers through a modern, bento-style interface.
 
-## Recommended Browser Setup
+## 🛠️ Roadmap & Status
+Loomi is currently in **Active Development**.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### ✨ Key Features
+* **Bento Dashboard:** At-a-glance view of next classes, pending tasks, and stats.
+* **Smart Auth:** Secure authentication powered by Supabase with custom role-based redirection.
+* **Modern UI/UX:** Dark-mode first design with glassmorphism effects and smooth transitions.
+* **Role Management:** Tailored experiences for both Teachers and Students.
 
-## Type Support for `.vue` Imports in TS
+### 🛠️ Tech Stack
+| Tool | Purpose |
+| :--- | :--- |
+| **Vue.js 3** | Progressive JavaScript Framework (Composition API) |
+| **TypeScript** | Type safety and scalable architecture |
+| **SupaBase** | Backend-as-a-Service (Auth & PostgreSQL Database) |
+| **Vite** | Lightning-fast build tool and dev server |
+| **Vue Router** | Single Page Application (SPA) navigation |
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## 📂 Project Structure
+```text
+src/
+├── assets/         # Styles & Media
+├── components/     # Reusable UI Components
+├── views/          # Page-level components (Landing, Login, Dashboard)
+└── router/         # Navigation logic
+````
+## ⚙️ Installation & Setup
+### 1. Clone the repository
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+````Bash
+git clone [https://github.com/oriioll/loomi.git](https://github.com/oriioll/loomi.git)
+cd loomi
+````
+### 2. Install dependencies
 
-## Project Setup
-
-```sh
+````Bash
 npm install
-```
+````
 
-### Compile and Hot-Reload for Development
+### 3. Environment Variables Create a .env file in the root directory and add your Supabase credentials:
 
-```sh
+````
+VITE_SUPABASE_URL=your_url
+VITE_SUPABASE_ANON_KEY=your_key
+````
+### 4. Run Development Server
+
+````Bash
 npm run dev
-```
+````
 
-### Type-Check, Compile and Minify for Production
+---
+## 📦 Production
+To build the project for production:
 
-```sh
+````Bash
 npm run build
-```
+````
+## 📄 License
+This project is licensed under the MIT License.
+
+<div align="center"> Made by Oriol Plazas </div>
