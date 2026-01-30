@@ -176,7 +176,7 @@ section.login {
 
 .buttons button {
   width: 50%;
-  height: 100%;
+  height: 8vh;
   border: transparent;
   cursor: pointer;
   background-color: transparent;
@@ -387,6 +387,10 @@ span#errorMessage.successfull {
     transform: scale(0.85);
   }
 
+  .buttons button {
+    height: 6vh;
+  }
+
 }
 
 /*
@@ -395,7 +399,6 @@ fix btns links
 /* Esto hace que el enlace ocupe el espacio que le toca al botón */
 .buttons a {
   width: 50%;
-  height: 100%;
   display: block;
   /* O inline-block */
   text-decoration: none;
@@ -405,7 +408,6 @@ fix btns links
 /* Ajusta el botón dentro del link para que rellene el 100% de ese 50% */
 .buttons a button {
   width: 100%;
-  height: 100%;
 }
 
 /*animations*/
