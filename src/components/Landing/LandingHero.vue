@@ -26,12 +26,12 @@ const goLogin = () => router.push('/login')
                 Watch Demo
             </button>
         </div>
-        <img src="../assets/imgs/mockupLoomi.webp" alt="Mockup of Loomi">
+        <img src="../../assets/imgs/mockupLoomi.webp" alt="Mockup of Loomi">
     </section>
 </template>
 <style scoped>
 .hero {
-    height: 90%;
+    height: 90vh;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -137,12 +137,21 @@ img {
     z-index: -1;
     width: 65%;
     max-width: 1200px;
-    right: -10%;
-    bottom: 10%;
+    right: -7%;
+    bottom: 7%;
     transform: translateY(20%) rotate(-1deg);
-    opacity: 0.4;
-    mask-image: linear-gradient(to top, black 20%, transparent 80%);
-    -webkit-mask-image: linear-gradient(to top, black 20%, transparent 80%);
+    opacity: 0.5;
+    -webkit-mask-image:
+        linear-gradient(to right, transparent 0%, black 50%),
+        linear-gradient(to bottom, transparent 0%, black 20%, black 60%, transparent 98%);
+
+    mask-image:
+        linear-gradient(to right, transparent 0%, black 50%),
+        linear-gradient(to bottom, transparent 0%, black 20%, black 60%, transparent 98%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    filter: blur(2px) brightness(0.8) contrast(1.1) saturate(1.2);
+
     pointer-events: none;
 }
 
@@ -171,6 +180,7 @@ RESPONSIVE MEDIA QUERIES
 
 @media (max-width: 800px) {
     .hero {
+        height: 82vh;
         justify-content: flex-start;
         padding-top: 15%;
     }

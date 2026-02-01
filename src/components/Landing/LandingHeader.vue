@@ -10,13 +10,13 @@ const router = useRouter()
         <h2><a class="mainTitle" href="/home">Loomi</a></h2>
         <ul>
             <li id="features">
-                <a class="navLink" href="">Features</a>
+                <a class="navLink" href="#features">Features</a>
             </li>
             <li id="pricing">
-                <a class="navLink" href="">Pricing</a>
+                <a class="navLink" href="#pricing">Pricing</a>
             </li>
             <li id="about">
-                <a class="navLink" href="">About</a>
+                <a class="navLink" href="#about">About</a>
             </li>
             <li class="login">
                 <a class="login" role="button" @click="router.push('/login')">Sign In</a>
@@ -33,7 +33,7 @@ h2 {
 }
 
 header {
-    height: 10%;
+    height: 10vh;
     width: 100%;
     display: flex;
     flex-direction: row;
