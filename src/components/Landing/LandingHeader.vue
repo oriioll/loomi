@@ -3,14 +3,20 @@ import { onMounted } from 'vue'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
-
+function scrollVHs(vh: number) {
+    const pixels = (window.innerHeight * vh) / 100;
+    window.scrollTo({
+        top: pixels,
+        behavior: 'smooth'
+    });
+};
 </script>
 <template>
     <header>
         <h2><a class="mainTitle" href="/home">Loomi</a></h2>
         <ul>
             <li id="features">
-                <a class="navLink" href="#features">Features</a>
+                <a class="navLink" @click.prevent="scrollVHs(100)">Features</a>
             </li>
             <li id="pricing">
                 <a class="navLink" href="#pricing">Pricing</a>
@@ -56,6 +62,10 @@ a {
     text-decoration: none;
     color: inherit;
     font-size: 1rem;
+}
+
+a:hover {
+    cursor: pointer;
 }
 
 .navLink {
