@@ -181,6 +181,7 @@ header {
 
 header h1 {
   font-size: 4rem;
+  color: var(--accent-primary);
 }
 
 header p {

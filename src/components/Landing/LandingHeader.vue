@@ -22,7 +22,7 @@ function scrollVHs(vh: number) {
                 <a class="navLink" @click.prevent="scrollVHs(190)">Pricing</a>
             </li>
             <li id="about">
-                <a class="navLink" href="#about">About</a>
+                <a class="navLink" @click.prevent="scrollVHs(270)">About</a>
             </li>
             <li class="login">
                 <a class="login" role="button" @click="router.push('/login')">Sign In</a>
