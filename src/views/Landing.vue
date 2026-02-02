@@ -6,6 +6,7 @@ import LandingHeader from '@/components/Landing/LandingHeader.vue';
 import LandingHero from '@/components/Landing/LandingHero.vue';
 import LandingFeatures from '@/components/Landing/LandingFeatures.vue';
 import LandingPricing from '@/components/Landing/LandingPricing.vue';
+import LandingAbout from '@/components/Landing/LandingAbout.vue'
 const router = useRouter()
 
 </script>
@@ -15,6 +16,7 @@ const router = useRouter()
         <LandingHero />
         <LandingFeatures />
         <LandingPricing />
+        <LandingAbout />
     </main>
 </template>
 <style scoped>

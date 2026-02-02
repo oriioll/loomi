@@ -7,7 +7,7 @@ const router = useRouter()
 </script>
 <template>
     <section class="pricing" id="pricing">
-        <h2>Pricing</h2>
+        <h2>Loomi is now free</h2>
         <div class="pricingContainers">
             <article class="freePlan">
                 <h4>INDIVIDUAL</h4>
@@ -90,7 +90,7 @@ h2 {
 }
 
 article {
-    padding: 0.5rem 1.7rem;
+    padding: 1rem 1.7rem;
     width: 30%;
     background-color: var(--card-bg);
     border-radius: 20px;
