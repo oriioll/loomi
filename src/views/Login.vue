@@ -126,7 +126,6 @@ header {
 
 header h1 {
   font-size: 4rem;
-  color: var(--accent-primary);
 }
 
 header p {
@@ -153,8 +152,11 @@ section.login {
   height: 100%;
   background-color: var(--card-bg);
   border-radius: 20px;
-  border: solid 2px var(--card-border);
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6), 0 2px 6px rgba(0, 0, 0, 0.35);
+  /* Borde azul con un toque de transparencia para que no sea tan "agresivo" */
+  border: 2px solid rgba(99, 102, 241, 0.6);
+  /* Un shadow que use el azul para dar sensación de profundidad */
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.1),
+    0 10px 30px rgba(2, 6, 23, 0.6);
   transition: all .3s ease-out;
   display: flex;
   flex-direction: column;
@@ -165,6 +167,7 @@ section.login {
 }
 
 .loginForm:hover {
+  border: 2px solid rgba(99, 102, 241, 1);
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(2, 6, 23, 0.6), 0 6px 12px rgba(0, 0, 0, 0.5);
 }
