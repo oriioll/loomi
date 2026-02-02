@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import LandingHeader from '@/components/Landing/LandingHeader.vue';
 import LandingHero from '@/components/Landing/LandingHero.vue';
 import LandingFeatures from '@/components/Landing/LandingFeatures.vue';
+import LandingPricing from '@/components/Landing/LandingPricing.vue';
 const router = useRouter()
 
 </script>
@@ -13,6 +14,7 @@ const router = useRouter()
         <LandingHeader />
         <LandingHero />
         <LandingFeatures />
+        <LandingPricing />
     </main>
 </template>
 <style scoped>
@@ -24,5 +26,6 @@ main {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    gap: 5rem;
 }
 </style>

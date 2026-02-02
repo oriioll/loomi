@@ -16,10 +16,10 @@ function scrollVHs(vh: number) {
         <h2><a class="mainTitle" href="/home">Loomi</a></h2>
         <ul>
             <li id="features">
-                <a class="navLink" @click.prevent="scrollVHs(100)">Features</a>
+                <a class="navLink" @click.prevent="scrollVHs(110)">Features</a>
             </li>
             <li id="pricing">
-                <a class="navLink" href="#pricing">Pricing</a>
+                <a class="navLink" @click.prevent="scrollVHs(190)">Pricing</a>
             </li>
             <li id="about">
                 <a class="navLink" href="#about">About</a>

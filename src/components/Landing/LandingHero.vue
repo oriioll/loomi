@@ -219,7 +219,6 @@ RESPONSIVE MEDIA QUERIES
         font-size: .9rem;
         transition: all .25s ease-in;
         background: var(--accent-primary);
-
     }
 
     .demo {
